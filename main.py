@@ -1,4 +1,10 @@
+
+
+
+
+
 class Inventory:
+
     def __init__(self):
         self.Products = {}
     
@@ -8,7 +14,7 @@ class Inventory:
         else:
             self.Products[item_name] = {'price': price, 'quantity': quantity}
 
-    def get_item(self, item_name):
+    def get_item(self, item_name):  
         if item_name not in self.Products:
             print(f"Item '{item_name}' not found in inventory")
         else:
