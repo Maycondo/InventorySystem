@@ -1,0 +1,4 @@
+
+
+# Ignorar arquivos e diretórios de dados do MySQL
+docker/mysql_inventory/
