@@ -7,9 +7,9 @@ class Inventory:
     def __init__(self, host='localhost', user='root', password='', database='inventory_db'):
         self.Connection = pymysql.connect(
             host=host,
-            user=user,
+            user=user,                              
             password=password,
-            database=database
+            database=database   
         )
         self.create_table()
     
