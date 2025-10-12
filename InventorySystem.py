@@ -28,7 +28,7 @@ class Inventory:
                     ')'             
                 )
                 print("✅ Database and table ready")
-                print(50 * "-----")
+                print(50 * "-----")     
                 print("📦 Welcome to Inventory System")
                 self.Connection.commit()
         except pymysql.MySQLError as e:
@@ -79,7 +79,7 @@ class Inventory:
         if item_name in self.Products and self.Products[item_name]['quantity'] >= quantity:
             self.Products[item_name]['quantity'] -= quantity
             if self.Products[item_name]['quantity'] == 0:
-                del self.Products[item_name]
+                del self.Products[item_name]    
         
         with self.Connection.cursor() as cursor:        
             cursor.execute("SELECT * FROM products WHERE name = %s", (item_name,))
