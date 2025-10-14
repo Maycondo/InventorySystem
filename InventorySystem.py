@@ -4,21 +4,20 @@ import pymysql
 # Inventory System with MySQL database integration      
 class Inventory:
     # Initialize the inventory system and connect to the database
-    def __init__(self, host='localhost', user='root', password='', database='inventory_db'):
+    def __init__(self, host='localhost', user='inventory_user', password='188429618', database='InvetorySystem'):
         self.Connection = pymysql.connect(
             host=host,
             user=user,                              
             password=password,
             database=database   
-        )
+        )       
         self.create_table()
     
     # Create the prodcuts table if it doesn't exist
     def create_table(self):
         try:
             # Using "with" statement to ensure the connection is properly managed
-            with self.Connection as cursor():
-                cursor = self.Connection.cursor()                   
+            with self.Connection.cursor() as cursor:                     
                 cursor.execute(
                     'CREATE TABLE IF NOT EXISTS products (' 
                         'id INT AUTO_INCREMENT PRIMARY KEY,'
@@ -28,7 +27,7 @@ class Inventory:
                     ')'             
                 )
                 print("✅ Database and table ready")
-                print(50 * "-----")     
+                print(5 * "-----")     
                 print("📦 Welcome to Inventory System")
                 self.Connection.commit()
         except pymysql.MySQLError as e:
@@ -49,6 +48,7 @@ class Inventory:
                 "UPDATE products SET name = %s, price = %s, quantity = %s WHERE id = %s",
                 (item_name, price, quantity, result[0])
                 )
+            self.Connection.commit()
 
     # Retrieve an item from the inventory
     def get_item(self, item_name):
@@ -76,23 +76,21 @@ class Inventory:
                 print(10 * "-----")
 
     def remove_item(self, item_name, quantity):
-        if item_name in self.Products and self.Products[item_name]['quantity'] >= quantity:
-            self.Products[item_name]['quantity'] -= quantity
-            if self.Products[item_name]['quantity'] == 0:
-                del self.Products[item_name]    
-        
-        with self.Connection.cursor() as cursor:        
+        with self.Connection.cursor() as cursor: 
+
             cursor.execute("SELECT * FROM products WHERE name = %s", (item_name,))
             resul = cursor.fetchone()
+        
             if resul:
-                if resul[0] <= quantity:
+                currently_quantity = resul[0]       
+                if currently_quantity >= quantity:
                     cursor.execute("DELETE FROM products WHERE name = %s", (item_name,))
                 else:
-                    cursor.execute("UPDATE products SET quantity = quantity - %s WHERE name = %s",(quantity, item_name))
-                self.Connection.commit()        
+                    cursor.execute("UPDATE products SET quantity = quantity - %s WHERE name = %s",(quantity, item_name))       
                 print(f"✅ Removido {quantity} de '{item_name}'.")
             else:
-                print(f"❌ Item '{item_name}' não encontrado.")
+                print(f"❌ Item '{item_name}' não encontrado.") 
+            self.Connection.commit()
 
     def close(self):
         self.Connection.close()
