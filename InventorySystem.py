@@ -49,6 +49,21 @@ class Inventory:
                 (item_name, price, quantity, result[0])
                 )
             self.Connection.commit()
+            
+    # Update an existing item in the inventory
+    def update_item(self, item_name, price=None, quantity=None):
+        with self.Connection.cursor() as cursor:
+            if price is not None:
+                cursor.execute(
+                    "UPDATE products SET price = %s WHERE name = %s",
+                    (price, item_name)
+                )
+            if quantity is not None:
+                cursor.execute(
+                    "UPDATE products SET quantity = %s WHERE name = %s",
+                    (quantity, item_name)
+                )
+            self.Connection.commit()
 
     # Retrieve an item from the inventory
     def get_item(self, item_name):
