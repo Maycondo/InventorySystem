@@ -3,21 +3,30 @@ from InventorySystem import Inventory
 
 inv = Inventory()
 
+# Create items
+inv.create_item("Laptop", 1500.00, 10)
+inv.create_item("Smartphone", 800.00, 25)       
+inv.create_item("Tablet", 400.00, 15)
+inv.create_item("Teclado", 500.00, 10)  # Attempt to add duplicate
+inv.create_item("Monitor", 700.00, 20)
+inv.create_item("Mouse", 50.00, 100)
+inv.create_item("Headphones", 150.00, 30)
+inv.create_item("Webcam", 120.00, 40)
+inv.create_item("Printer", 200.00, 5)
+inv.create_item("Router", 80.00, 50)
+inv.create_item("External Hard Drive", 100.00, 15)
+inv.create_item("USB Flash Drive", 20.00, 200)
+inv.create_item("Speakers", 90.00, 25)
+inv.create_item("Microphone", 110.00, 10)   
 
-# Add items
-inv.create_item("Notebook", 1500.00, 10)  # add 10 units
-inv.create_item("Smartphone", 800.00, 3)  # add 3 units
-inv.create_item("Tablet", 400.00, 5)  #
-inv.create_item("Headphones", 150.00, 15)  # add 15 units
-inv.create_item("Smartwatch", 200.00, 7)  # add 7 units
-inv.create_item("Smartphone", 800.00, 2)  # add 2 more units
-
-# Remove items
-inv.remove_item("Headphones", 5)  # remove 5 units      
-inv.remove_item("Notebook", 12)  # try to remove 12 units (only 10 available)
-inv.remove_item("Tablet", 10)  # try to remove 10 units (only 5 available)
-inv.remove_item("Smartphone", 1)  # remove 1 unit   
-inv.remove_item("Smartwatch", 3)  # remove 3 units # remove 3 units 
+# Update items
+inv.update_item("Laptop", price=1400.00)
+inv.update_item("Smartphone", quantity=30)
+inv.update_item("Tablet", price=350.00, quantity=20)
 
 
-inv.list_items()    
+# Get item details
+
+inv.list_items()
+
+   

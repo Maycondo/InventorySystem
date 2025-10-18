@@ -27,7 +27,7 @@ class Inventory:
                     ')'             
                 )
                 print("✅ Database and table ready")
-                print(5 * "-----")     
+                print(10 * "-----")     
                 print("📦 Welcome to Inventory System")
                 self.Connection.commit()
         except pymysql.MySQLError as e:
@@ -37,28 +37,34 @@ class Inventory:
     # Create a new item in the inventory
     def create_item(self, item_name, price, quantity):
         # Store item in local dictionary
-        with self.Connection.cursor() as cursor:
-            cursor.execute(
-                "INSERT INTO products (name, price, quantity) VALUES (%s, %s, %s)",
-                (item_name, price, quantity)
-            )
-            result = cursor.fetchone()
-            if result:
-                cursor.execute("" \
-                "UPDATE products SET name = %s, price = %s, quantity = %s WHERE id = %s",
-                (item_name, price, quantity, result[0])
-                )
-            self.Connection.commit()
+        try:
+            with self.Connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM products WHERE name = %s", (item_name,))
+                existing_item = cursor.fetchone()
+
+                if existing_item:
+                    print(f"⚠️ O item '{item_name}' já existe no inventário.")
+                else:
+                    cursor.execute(
+                        "INSERT INTO products (name, price, quantity) VALUES (%s, %s, %s)",
+                        (item_name, price, quantity)
+                    )
+                print(f"✅ Adicionado '{item_name}' ao inventário.")
+                self.Connection.commit()   
+        except pymysql.MySQLError as e:
+            print(f"❌ Error adding item: {e}")     
             
     # Update an existing item in the inventory
     def update_item(self, item_name, price=None, quantity=None):
         with self.Connection.cursor() as cursor:
             if price is not None:
+                print(f"Atualizando o preço de '{item_name}' para {price}.")    
                 cursor.execute(
                     "UPDATE products SET price = %s WHERE name = %s",
                     (price, item_name)
                 )
             if quantity is not None:
+                print(f"Atualizando a quantidade de '{item_name}' para {quantity}.")
                 cursor.execute(
                     "UPDATE products SET quantity = %s WHERE name = %s",
                     (quantity, item_name)
@@ -87,6 +93,7 @@ class Inventory:
         else:
             print("🗂️ Itens no inventário:")        
             for row in rows:
+                print(10 * "-----") 
                 print(f"{row[1]} → Preço: {row[2]}, Quantidade: {row[3]}")
                 print(10 * "-----")
 
